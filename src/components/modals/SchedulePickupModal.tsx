@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { X, CalendarClock, Truck, CheckCircle2 } from "lucide-react";
-import { Button } from "./ui/button";
-import { Input } from "./ui/input";
+import { Button } from "../ui/button";
+import { Input } from "../ui/input";
 
 interface SchedulePickupModalProps {
   isOpen: boolean;

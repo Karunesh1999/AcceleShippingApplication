@@ -1,6 +1,6 @@
 import { CheckCircle2, Clock, AlertTriangle, ChevronRight, Truck, ArrowRight, Copy } from "lucide-react";
-import { Shipment } from "../types";
-import { Badge } from "./ui/badge";
+import { Shipment } from "../../types";
+import { Badge } from "../ui/badge";
 
 interface ShipmentCardProps {
   shipment: Shipment;

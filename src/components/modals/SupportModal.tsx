@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { X, Headphones, Phone, Mail, Send, CheckCircle2 } from "lucide-react";
-import { Button } from "./ui/button";
-import { Input } from "./ui/input";
+import { Button } from "../ui/button";
+import { Input } from "../ui/input";
 
 interface SupportModalProps {
   isOpen: boolean;

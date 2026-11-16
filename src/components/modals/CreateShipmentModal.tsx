@@ -8,10 +8,10 @@ import {
   ArrowRight,
   Shield,
 } from "lucide-react";
-import { Shipment } from "../types";
-import { Button } from "./ui/button";
-import { Input } from "./ui/input";
-import { Badge } from "./ui/badge";
+import { Shipment } from "../../types";
+import { Button } from "../ui/button";
+import { Input } from "../ui/input";
+import { Badge } from "../ui/badge";
 
 interface CreateShipmentModalProps {
   isOpen: boolean;

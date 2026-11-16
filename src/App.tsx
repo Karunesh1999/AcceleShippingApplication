@@ -4,24 +4,33 @@ import {
   initialNotifications,
   sampleAddresses,
 } from "./data/shipments";
+import { acceleProducts, Product } from "./data/products";
+import { techManuals, TechManual } from "./data/manuals";
+import { initialRmaClaims, RmaClaim } from "./data/rma";
 import { Shipment, AppNotification, UserAddress } from "./types";
-import { SplashScreen } from "./components/SplashScreen";
-import { OnboardingScreen } from "./components/OnboardingScreen";
-import { Header } from "./components/Header";
-import { HomeView } from "./components/HomeView";
-import { ShipmentsView } from "./components/ShipmentsView";
-import { TrackView } from "./components/TrackView";
-import { ProfileView } from "./components/ProfileView";
-import { ShipmentDetailModal } from "./components/ShipmentDetailModal";
-import { CreateShipmentModal } from "./components/CreateShipmentModal";
-import { QuoteCalculatorModal } from "./components/QuoteCalculatorModal";
-import { SupportModal } from "./components/SupportModal";
-import { SchedulePickupModal } from "./components/SchedulePickupModal";
+import { SplashScreen } from "./components/onboarding/SplashScreen";
+import { OnboardingScreen } from "./components/onboarding/OnboardingScreen";
+import { Header } from "./components/layout/Header";
+import { HomeView } from "./views/HomeView";
+import { CatalogView } from "./views/CatalogView";
+import { ShipmentsView } from "./views/ShipmentsView";
+import { TechHubView } from "./views/TechHubView";
+import { TrackView } from "./views/TrackView";
+import { ProfileView } from "./views/ProfileView";
+import { ShipmentDetailModal } from "./components/modals/ShipmentDetailModal";
+import { CreateShipmentModal } from "./components/modals/CreateShipmentModal";
+import { QuoteCalculatorModal } from "./components/modals/QuoteCalculatorModal";
+import { SupportModal } from "./components/modals/SupportModal";
+import { SchedulePickupModal } from "./components/modals/SchedulePickupModal";
+import { ProductDetailModal } from "./components/modals/ProductDetailModal";
+import { ManualDetailModal } from "./components/modals/ManualDetailModal";
+import { RmaModal } from "./components/modals/RmaModal";
 import { Iphone } from "./components/ui/iphone";
 import {
   Home as HomeIcon,
+  Grid,
   Package,
-  ScanLine,
+  Wrench,
   User,
   CheckCircle2,
   Smartphone,
@@ -77,24 +86,29 @@ export default function App() {
   }, []);
 
   // Determine whether to display inside iPhone wrapper
-  // On desktop (width >= 900 and not inspecting), wrapper is shown.
-  // When F12 is pressed or mobile/inspect mode is active, wrapper is hidden.
   const showIphoneWrapper =
     manualFrameToggle !== null ? manualFrameToggle : !isMobileOrInspecting;
 
-  // State collections
+  // Collections state
   const [shipments, setShipments] = useState<Shipment[]>(initialShipments);
   const [notifications, setNotifications] =
     useState<AppNotification[]>(initialNotifications);
   const [addresses, setAddresses] = useState<UserAddress[]>(sampleAddresses);
+  const [rmaClaims, setRmaClaims] = useState<RmaClaim[]>(initialRmaClaims);
 
   // Modals state
   const [activeShipmentDetail, setActiveShipmentDetail] =
     useState<Shipment | null>(null);
   const [isCreatingShipment, setIsCreatingShipment] = useState(false);
+  const [preselectedItem, setPreselectedItem] = useState<string | undefined>(undefined);
   const [isQuoteOpen, setIsQuoteOpen] = useState(false);
   const [isSupportOpen, setIsSupportOpen] = useState(false);
   const [isPickupOpen, setIsPickupOpen] = useState(false);
+
+  // New Brand Companion Modals
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+  const [selectedManual, setSelectedManual] = useState<TechManual | null>(null);
+  const [isRmaOpen, setIsRmaOpen] = useState(false);
 
   // Toast notification state
   const [toastMessage, setToastMessage] = useState<string | null>(null);
@@ -116,14 +130,46 @@ export default function App() {
     setShipments((prev) => [newShipment, ...prev]);
     const newNotification: AppNotification = {
       id: `notif-${Date.now()}`,
-      title: "New Shipment Dispatched",
-      message: `${newShipment.item} (#${newShipment.id}) has been added to the logistics queue.`,
+      title: "New Dispatch Order Created",
+      message: `${newShipment.item} (#${newShipment.id}) dispatched to carrier queue.`,
       time: "Just now",
       read: false,
       type: "shipment",
     };
     setNotifications((prev) => [newNotification, ...prev]);
     showToast(`Shipment #${newShipment.id} successfully created!`);
+  };
+
+  const handleRmaSubmitted = (newClaim: RmaClaim) => {
+    setRmaClaims((prev) => [newClaim, ...prev]);
+    const newNotification: AppNotification = {
+      id: `notif-${Date.now()}`,
+      title: "RMA Authorization Issued",
+      message: `${newClaim.id} authorized for ${newClaim.partNumber}. Return label ready.`,
+      time: "Just now",
+      read: false,
+      type: "alert",
+    };
+    setNotifications((prev) => [newNotification, ...prev]);
+    showToast(`RMA #${newClaim.id} authorized by Santa Fe Springs HQ.`);
+  };
+
+  const handleDownloadManual = (title: string) => {
+    showToast(`PDF Downloaded: ${title.slice(0, 32)}...`);
+  };
+
+  const handleViewManualByModel = (partNumber: string) => {
+    const found = techManuals.find(
+      (m) =>
+        m.model.toLowerCase().includes(partNumber.toLowerCase()) ||
+        partNumber.toLowerCase().includes(m.model.toLowerCase())
+    );
+    setSelectedManual(found || techManuals[0]);
+  };
+
+  const handleDispatchProduct = (product: Product) => {
+    setPreselectedItem(product.name);
+    setIsCreatingShipment(true);
   };
 
   const handleMarkNotificationRead = (id: string) => {
@@ -157,10 +203,12 @@ export default function App() {
     showToast("Default dispatch facility updated.");
   };
 
+  // 5-Tab Official Accele Companion Navigation
   const navigation = [
     { key: "home", label: "Home", icon: HomeIcon },
-    { key: "shipments", label: "Shipments", icon: Package },
-    { key: "track", label: "Track", icon: ScanLine },
+    { key: "catalog", label: "Catalog", icon: Grid },
+    { key: "shipments", label: "Logistics", icon: Package },
+    { key: "techhub", label: "Tech Hub", icon: Wrench },
     { key: "profile", label: "Account", icon: User },
   ];
 
@@ -177,7 +225,7 @@ export default function App() {
         <OnboardingScreen onFinish={() => setFlowState("app")} />
       )}
 
-      {/* 3. Main Logistics Portal */}
+      {/* 3. Main Logistics & Brand Portal */}
       {flowState === "app" && (
         <>
           {/* Toast popup */}
@@ -196,22 +244,38 @@ export default function App() {
               onClearAllNotifications={handleClearAllNotifications}
               activePage={activePage}
               setActivePage={setActivePage}
-              onCreateShipment={() => setIsCreatingShipment(true)}
+              onCreateShipment={() => {
+                setPreselectedItem(undefined);
+                setIsCreatingShipment(true);
+              }}
             />
 
             {/* Main Views Container */}
-            <main className="flex-1 px-3 sm:px-5 pt-3 sm:pt-4 pb-24">
+            <main className="flex-1 px-3 sm:px-4 pt-3 pb-24">
               {activePage === "home" && (
                 <HomeView
                   shipments={shipments}
                   onOpenShipment={(shipment) => setActiveShipmentDetail(shipment)}
-                  onCreateShipment={() => setIsCreatingShipment(true)}
-                  onTrack={() => setActivePage("track")}
+                  onCreateShipment={() => {
+                    setPreselectedItem(undefined);
+                    setIsCreatingShipment(true);
+                  }}
+                  onBrowseCatalog={() => setActivePage("catalog")}
+                  onOpenTechManuals={() => setActivePage("techhub")}
+                  onOpenRma={() => setIsRmaOpen(true)}
+                  onTrack={() => setActivePage("shipments")}
                   onQuote={() => setIsQuoteOpen(true)}
-                  onSupport={() => setIsSupportOpen(true)}
-                  onSchedulePickup={() => setIsPickupOpen(true)}
                   onViewAllShipments={() => setActivePage("shipments")}
                   onCopyId={handleCopyId}
+                  onSelectProduct={(product) => setSelectedProduct(product)}
+                />
+              )}
+
+              {activePage === "catalog" && (
+                <CatalogView
+                  onSelectProduct={(product) => setSelectedProduct(product)}
+                  onDispatchProduct={handleDispatchProduct}
+                  onViewManual={handleViewManualByModel}
                 />
               )}
 
@@ -219,15 +283,20 @@ export default function App() {
                 <ShipmentsView
                   shipments={shipments}
                   onOpenShipment={(shipment) => setActiveShipmentDetail(shipment)}
-                  onCreateShipment={() => setIsCreatingShipment(true)}
+                  onCreateShipment={() => {
+                    setPreselectedItem(undefined);
+                    setIsCreatingShipment(true);
+                  }}
                   onCopyId={handleCopyId}
                 />
               )}
 
-              {activePage === "track" && (
-                <TrackView
-                  shipments={shipments}
-                  onOpenShipment={(shipment) => setActiveShipmentDetail(shipment)}
+              {activePage === "techhub" && (
+                <TechHubView
+                  rmaClaims={rmaClaims}
+                  onOpenManual={(manual) => setSelectedManual(manual)}
+                  onOpenNewRma={() => setIsRmaOpen(true)}
+                  onDownloadManual={handleDownloadManual}
                 />
               )}
 
@@ -243,8 +312,8 @@ export default function App() {
               )}
             </main>
 
-            {/* Mobile Bottom Navigation Bar */}
-            <nav className="fixed bottom-0 left-0 right-0 z-40 flex items-center justify-around border-t border-slate-200/90 bg-white/95 px-2 pt-2 pb-[max(10px,env(safe-area-inset-bottom))] backdrop-blur-xl shadow-[0_-4px_20px_rgba(0,0,0,0.05)]">
+            {/* Mobile Bottom Navigation Bar (5 Standard iOS Tabs) */}
+            <nav className="fixed bottom-0 left-0 right-0 z-40 flex items-center justify-around border-t border-slate-200/90 bg-white/95 px-1 pt-2 pb-[max(10px,env(safe-area-inset-bottom))] backdrop-blur-xl shadow-[0_-4px_20px_rgba(0,0,0,0.05)]">
               {navigation.map((item) => {
                 const Icon = item.icon;
                 const isActive = activePage === item.key;
@@ -252,13 +321,13 @@ export default function App() {
                   <button
                     key={item.key}
                     onClick={() => setActivePage(item.key)}
-                    className={`flex min-w-[56px] flex-col items-center gap-1 rounded-xl px-2 py-1 text-[10px] font-bold transition-all cursor-pointer ${
+                    className={`flex min-w-[50px] flex-col items-center gap-1 rounded-xl px-1.5 py-1 text-[9px] font-bold transition-all cursor-pointer ${
                       isActive
                         ? "text-[#ed0b08] scale-105"
                         : "text-slate-400 hover:text-slate-700 active:scale-95"
                     }`}
                   >
-                    <Icon size={19} className={isActive ? "stroke-[2.5]" : "stroke-2"} />
+                    <Icon size={18} className={isActive ? "stroke-[2.5]" : "stroke-2"} />
                     <span>{item.label}</span>
                   </button>
                 );
@@ -275,14 +344,20 @@ export default function App() {
 
           <CreateShipmentModal
             isOpen={isCreatingShipment}
-            onClose={() => setIsCreatingShipment(false)}
+            onClose={() => {
+              setIsCreatingShipment(false);
+              setPreselectedItem(undefined);
+            }}
             onShipmentCreated={handleCreateShipment}
           />
 
           <QuoteCalculatorModal
             isOpen={isQuoteOpen}
             onClose={() => setIsQuoteOpen(false)}
-            onBookShipment={() => setIsCreatingShipment(true)}
+            onBookShipment={() => {
+              setPreselectedItem(undefined);
+              setIsCreatingShipment(true);
+            }}
           />
 
           <SupportModal
@@ -293,6 +368,26 @@ export default function App() {
           <SchedulePickupModal
             isOpen={isPickupOpen}
             onClose={() => setIsPickupOpen(false)}
+          />
+
+          {/* Option B: Brand Companion Modals */}
+          <ProductDetailModal
+            product={selectedProduct}
+            onClose={() => setSelectedProduct(null)}
+            onOrderOrShip={handleDispatchProduct}
+            onViewManual={handleViewManualByModel}
+          />
+
+          <ManualDetailModal
+            manual={selectedManual}
+            onClose={() => setSelectedManual(null)}
+            onDownload={handleDownloadManual}
+          />
+
+          <RmaModal
+            isOpen={isRmaOpen}
+            onClose={() => setIsRmaOpen(false)}
+            onClaimSubmitted={handleRmaSubmitted}
           />
         </>
       )}
@@ -307,7 +402,7 @@ export default function App() {
         {isMobileOrInspecting && (
           <button
             onClick={() => setManualFrameToggle(true)}
-            className="fixed bottom-18 right-3 z-50 flex items-center gap-1.5 rounded-full bg-slate-950/80 hover:bg-slate-950 text-white px-3 py-1.5 text-[10px] font-bold shadow-lg backdrop-blur-md border border-white/20 transition-all opacity-70 hover:opacity-100"
+            className="fixed bottom-18 right-3 z-50 flex items-center gap-1.5 rounded-full bg-slate-950/80 hover:bg-slate-950 text-white px-3 py-1.5 text-[10px] font-bold shadow-lg backdrop-blur-md border border-white/20 transition-all opacity-70 hover:opacity-100 cursor-pointer"
             title="Switch back to iPhone Wrapper View"
           >
             <Smartphone size={13} className="text-[#ed0b08]" />
@@ -332,9 +427,9 @@ export default function App() {
           />
           <div>
             <h1 className="text-xs sm:text-sm font-bold text-white tracking-tight flex items-center gap-2">
-              <span>Accele Logistics Portal</span>
+              <span>Accele Electronics Companion</span>
               <span className="rounded-full bg-red-500/20 text-red-300 text-[10px] px-2 py-0.5 border border-red-500/30">
-                Desktop iPhone Preview
+                12V Dealer & Fleet Portal
               </span>
             </h1>
           </div>
@@ -346,7 +441,7 @@ export default function App() {
             <button
               onClick={() => setFlowState("onboarding")}
               className="hidden sm:flex items-center gap-1.5 rounded-lg border border-white/15 bg-white/5 px-2.5 py-1.5 text-xs font-semibold text-slate-300 hover:text-white hover:bg-white/10 transition-colors cursor-pointer"
-              title="Replay Onboarding"
+              title="Replay Onboarding Tour"
             >
               <Sparkles size={13} className="text-[#ed0b08]" />
               <span>Tour</span>
@@ -376,11 +471,11 @@ export default function App() {
 
       {/* Studio Footer */}
       <footer className="w-full max-w-4xl pt-3 border-t border-white/10 flex flex-col xs:flex-row items-center justify-between text-[11px] text-slate-400 gap-2 shrink-0">
-        <p>© 2026 Accele Electronics, Inc. · Commercial Fleet Logistics</p>
+        <p>© 2026 Accele Electronics Inc. · Santa Fe Springs, CA · (800) 788-1212</p>
         <div className="flex items-center gap-3 text-[10px] text-slate-500">
-          <span>Press F12 or Inspect to view native mobile screen</span>
+          <span>Official 12V Mobile App</span>
           <span>•</span>
-          <span>iPhone 16 Pro Frame</span>
+          <span>F12 to inspect native mobile</span>
         </div>
       </footer>
     </div>

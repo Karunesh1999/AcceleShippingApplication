@@ -11,7 +11,7 @@ import {
   Box,
   ShieldCheck,
 } from "lucide-react";
-import { Button } from "./ui/button";
+import { Button } from "../ui/button";
 
 interface OnboardingScreenProps {
   onFinish: () => void;
@@ -20,14 +20,14 @@ interface OnboardingScreenProps {
 const slides = [
   {
     step: "01",
-    tag: "Commercial Electronics",
-    title: "Commercial Fleet & Automotive Vision",
+    tag: "Wholesale Catalog",
+    title: "5,000+ Automotive 12V Electronics",
     description:
-      "Priority logistics and order tracking designed specifically for Accele commercial backup cameras, AcceleVision displays, dashcams, and 12V wiring harnesses.",
-    highlightBadge: "30+ Years Manufacturing",
-    icon: Truck,
+      "Explore commercial backup cameras, AcceleVision overhead displays, seat heater pads, and Beuler relays with Tier 1 wholesale dealer pricing.",
+    highlightBadge: "35+ Years in Santa Fe Springs",
+    icon: Box,
     previewContent: (
-      <div className="rounded-2xl border border-slate-200/90 bg-white p-4 shadow-sm text-left space-y-3">
+      <div className="rounded-2xl border border-slate-200/90 bg-white p-3.5 shadow-sm text-left space-y-2.5">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <span className="grid h-8 w-8 place-items-center rounded-lg bg-red-50 text-[#ed0b08] font-bold text-xs">
@@ -35,20 +35,16 @@ const slides = [
             </span>
             <div>
               <p className="text-xs font-bold text-slate-900 leading-tight">RVC180CTD Camera</p>
-              <p className="text-[10px] text-slate-400">Automotive Vision · #AC82910472</p>
+              <p className="text-[10px] text-slate-400">Moving Object Recognition · $169</p>
             </div>
           </div>
           <span className="rounded-full bg-emerald-50 px-2 py-0.5 text-[9px] font-bold text-emerald-700">
-            QA Passed
+            In Stock
           </span>
         </div>
-        <div className="rounded-xl bg-slate-50 p-2.5 flex items-center justify-between text-[11px] text-slate-600">
-          <span className="font-semibold text-slate-800">Houston Hub, TX</span>
-          <ArrowRight size={12} className="text-slate-400" />
-          <span className="font-semibold text-slate-800">Austin, TX</span>
-        </div>
-        <div className="h-1.5 w-full bg-slate-100 rounded-full overflow-hidden">
-          <div className="h-full bg-gradient-to-r from-red-500 to-[#ed0b08] rounded-full w-[72%]" />
+        <div className="rounded-xl bg-slate-50 p-2 flex items-center justify-between text-[10px] text-slate-600">
+          <span>MSRP: <span className="line-through text-slate-400">$289.00</span></span>
+          <span className="font-bold text-[#ed0b08]">Tier 1: $169.00 (Save 41%)</span>
         </div>
       </div>
     ),
@@ -87,24 +83,24 @@ const slides = [
   },
   {
     step: "03",
-    tag: "Fleet Dispatch",
-    title: "Instant Shipping Quotes & Pickup Sweeps",
+    tag: "Technician Hub",
+    title: "Wiring Manuals & Instant RMA Claims",
     description:
-      "Generate instant rate estimates for Ground, 2-Day Air, and Overnight Express. Schedule warehouse courier sweeps and auto-insure high-value monitors.",
-    highlightBadge: "100% Insured Cargo Care",
-    icon: PackagePlus,
+      "Access interactive harness pin-out schematics and wire color guides in the field, or generate instant 1-click RMA return numbers for warranty service.",
+    highlightBadge: "Installer Tech Support",
+    icon: ShieldCheck,
     previewContent: (
-      <div className="rounded-2xl border border-slate-200/90 bg-white p-4 shadow-sm text-left space-y-2.5">
+      <div className="rounded-2xl border border-slate-200/90 bg-white p-3.5 shadow-sm text-left space-y-2">
         <div className="flex items-center justify-between">
-          <span className="text-xs font-bold text-slate-900">Accele Priority 2-Day Air</span>
-          <span className="text-sm font-black text-[#ed0b08]">$28.50</span>
+          <span className="text-xs font-bold text-slate-900">RMA Authorization Ready</span>
+          <span className="text-[10px] font-mono font-bold text-[#ed0b08]">RMA-ACC-89104</span>
         </div>
         <div className="flex items-center gap-2 text-[10px] text-slate-500">
-          <ShieldCheck size={14} className="text-[#ed0b08] shrink-0" />
-          <span>Includes Cargo Damage Protection & Direct Signature</span>
+          <ShieldCheck size={14} className="text-emerald-600 shrink-0" />
+          <span>Santa Fe Springs HQ 1-Year Commercial Warranty</span>
         </div>
-        <div className="rounded-lg bg-red-50 p-2 text-center text-[10px] font-bold text-[#ed0b08]">
-          Same-Day Dispatch Cutoff: 4:00 PM CST
+        <div className="rounded-lg bg-red-50 p-1.5 text-center text-[10px] font-bold text-[#ed0b08]">
+          Hotline: (800) 788-1212 Ext. 170
         </div>
       </div>
     ),

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { X, Calculator, Truck, Sparkles, ChevronDown } from "lucide-react";
-import { Button } from "./ui/button";
-import { Input } from "./ui/input";
+import { Button } from "../ui/button";
+import { Input } from "../ui/input";
 
 interface QuoteCalculatorModalProps {
   isOpen: boolean;

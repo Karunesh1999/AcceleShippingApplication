@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { Bell, Truck } from "lucide-react";
-import { AppNotification } from "../types";
-import { Badge } from "./ui/badge";
-import { Button } from "./ui/button";
+import { AppNotification } from "../../types";
+import { Badge } from "../ui/badge";
+import { Button } from "../ui/button";
 
 interface HeaderProps {
   notifications: AppNotification[];

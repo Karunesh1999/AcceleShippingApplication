@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { Shipment } from "../types";
-import { ShipmentCard } from "./ShipmentCard";
+import { ShipmentCard } from "../components/layout/ShipmentCard";
 import { Search, Plus, PackageX, ArrowUpDown } from "lucide-react";
-import { Button } from "./ui/button";
-import { Input } from "./ui/input";
+import { Button } from "../components/ui/button";
+import { Input } from "../components/ui/input";
 
 interface ShipmentsViewProps {
   shipments: Shipment[];

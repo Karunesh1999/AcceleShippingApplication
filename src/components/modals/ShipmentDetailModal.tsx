@@ -9,8 +9,8 @@ import {
   Printer,
   Check,
 } from "lucide-react";
-import { Shipment } from "../types";
-import { Button } from "./ui/button";
+import { Shipment } from "../../types";
+import { Button } from "../ui/button";
 
 interface ShipmentDetailModalProps {
   shipment: Shipment | null;
