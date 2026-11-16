@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { X, Calculator, Truck, Sparkles, ChevronDown } from "lucide-react";
+import { X, Calculator, Truck, ChevronDown } from "lucide-react";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 
@@ -186,7 +186,7 @@ export function QuoteCalculatorModal({
                 <div className="flex items-center justify-between rounded-xl border-2 border-red-500/80 bg-red-50/20 p-2.5">
                   <div className="flex items-center gap-2.5">
                     <div className="grid h-8 w-8 place-items-center rounded-xl bg-[#ed0b08] text-white shrink-0">
-                      <Sparkles size={15} />
+                      <Truck size={15} />
                     </div>
                     <div>
                       <div className="flex items-center gap-1">

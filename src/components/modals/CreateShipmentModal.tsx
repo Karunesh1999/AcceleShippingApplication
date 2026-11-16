@@ -4,7 +4,6 @@ import {
   MapPin,
   Truck,
   CheckCircle2,
-  Sparkles,
   ArrowRight,
   Shield,
 } from "lucide-react";
@@ -219,7 +218,7 @@ export function CreateShipmentModal({
 
             <div>
               <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-50 px-3 py-1 text-xs font-bold text-emerald-700">
-                <Sparkles size={13} /> Label Generated
+                <CheckCircle2 size={13} /> Label Generated
               </span>
               <h2 className="text-xl font-bold text-slate-950 mt-1.5">
                 Shipment Dispatched Successfully!

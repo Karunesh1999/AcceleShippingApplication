@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { ShieldCheck, Sparkles, Truck } from "lucide-react";
+import { ShieldCheck, Truck } from "lucide-react";
 
 interface SplashScreenProps {
   onComplete: () => void;
@@ -42,7 +42,7 @@ export function SplashScreen({ onComplete }: SplashScreenProps) {
       {/* Top indicator */}
       <div className="relative z-10 pt-8 sm:pt-12 flex items-center gap-2">
         <span className="inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.2em] text-red-300 backdrop-blur-md">
-          <Sparkles size={11} className="text-red-400" />
+
           Fleet Logistics Network
         </span>
       </div>

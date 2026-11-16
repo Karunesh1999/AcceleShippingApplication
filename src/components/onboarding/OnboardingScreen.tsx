@@ -5,7 +5,6 @@ import {
   ArrowRight,
   ArrowLeft,
   CheckCircle2,
-  Sparkles,
   MapPin,
   PackagePlus,
   Box,
@@ -158,8 +157,8 @@ export function OnboardingScreen({ onFinish }: OnboardingScreenProps) {
             </div>
           </div>
 
-          <span className="inline-flex items-center gap-1.5 rounded-full bg-red-50 border border-red-100 px-3 py-0.5 text-[10px] font-bold uppercase tracking-wider text-[#ed0b08]">
-            <Sparkles size={11} /> {slide.highlightBadge}
+          <span className="inline-flex items-center rounded-full bg-red-50 border border-red-100 px-3 py-0.5 text-[10px] font-bold uppercase tracking-wider text-[#ed0b08]">
+            {slide.highlightBadge}
           </span>
         </div>
 

@@ -1,4 +1,4 @@
-import { ArrowRight, Sparkles, Truck, BookOpen } from "lucide-react";
+import { ArrowRight, Truck, BookOpen } from "lucide-react";
 import { Button } from "../ui/button";
 
 interface HeroProps {
@@ -9,11 +9,22 @@ interface HeroProps {
 export function Hero({ onBrowseCatalog, onCreateShipment }: HeroProps) {
   return (
     <section className="relative overflow-hidden rounded-2xl bg-slate-950 text-white shadow-lg shadow-slate-900/10">
-      <div className="relative z-10 flex min-h-[210px] flex-col justify-between p-4 bg-gradient-to-r from-slate-950 via-[#0d1322] to-slate-950">
+      {/* 4K Ultra HD Background Image with transparent gradient so marked right area is clearly visible */}
+      <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
+        <img
+          src="/assets/hero-bg-4k.jpg"
+          alt="Accele Fleet Electronics"
+          className="h-full w-full object-cover object-right opacity-85 transition-opacity"
+        />
+        {/* Left side remains dark for text contrast, right side fades to transparent for high image visibility */}
+        <div className="absolute inset-0 bg-gradient-to-r from-slate-950 via-slate-950/70 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent" />
+      </div>
+
+      <div className="relative z-10 flex min-h-[210px] flex-col justify-between p-4">
         {/* Top badge */}
         <div>
           <span className="inline-flex items-center gap-1 rounded-full border border-white/20 bg-white/10 px-2.5 py-0.5 text-[9px] font-bold uppercase tracking-[0.14em] backdrop-blur-md text-red-200">
-            <Sparkles size={11} className="text-red-400 shrink-0" />
             35+ Years Mobile Electronics
           </span>
         </div>

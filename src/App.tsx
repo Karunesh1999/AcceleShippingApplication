@@ -35,7 +35,6 @@ import {
   CheckCircle2,
   Smartphone,
   Maximize2,
-  Sparkles,
 } from "lucide-react";
 
 export default function App() {
@@ -416,52 +415,9 @@ export default function App() {
 
   /* Case 2: On Normal Desktop Screen -> Render inside realistic iPhone 16 Pro mockup wrapper */
   return (
-    <div className="min-h-[100dvh] w-full bg-gradient-to-b from-slate-950 via-[#0a0f1d] to-slate-950 text-white flex flex-col justify-between items-center selection:bg-[#ed0b08] selection:text-white p-3 sm:p-5 lg:p-6 overflow-x-hidden">
-      {/* Top Studio Bar */}
-      <header className="w-full max-w-4xl flex items-center justify-between pb-3 sm:pb-4 border-b border-white/10 shrink-0">
-        <div className="flex items-center gap-2.5">
-          <img
-            src="/assets/accele-mark.png"
-            alt="Accele"
-            className="h-6 sm:h-7 w-auto object-contain"
-          />
-          <div>
-            <h1 className="text-xs sm:text-sm font-bold text-white tracking-tight flex items-center gap-2">
-              <span>Accele Electronics Companion</span>
-              <span className="rounded-full bg-red-500/20 text-red-300 text-[10px] px-2 py-0.5 border border-red-500/30">
-                12V Dealer & Fleet Portal
-              </span>
-            </h1>
-          </div>
-        </div>
-
-        {/* Action Controls */}
-        <div className="flex items-center gap-2">
-          {flowState === "app" && (
-            <button
-              onClick={() => setFlowState("onboarding")}
-              className="hidden sm:flex items-center gap-1.5 rounded-lg border border-white/15 bg-white/5 px-2.5 py-1.5 text-xs font-semibold text-slate-300 hover:text-white hover:bg-white/10 transition-colors cursor-pointer"
-              title="Replay Onboarding Tour"
-            >
-              <Sparkles size={13} className="text-[#ed0b08]" />
-              <span>Tour</span>
-            </button>
-          )}
-
-          {/* Toggle Full Screen */}
-          <button
-            onClick={() => setManualFrameToggle(false)}
-            className="flex items-center gap-1.5 rounded-xl border border-white/20 bg-white/10 px-3 py-1.5 text-xs font-bold text-white hover:bg-white/20 transition-all cursor-pointer active:scale-95"
-            title="Inspect / Edge-to-Edge Mode"
-          >
-            <Maximize2 size={13} />
-            <span className="hidden xs:inline">Inspect Mode</span>
-          </button>
-        </div>
-      </header>
-
+    <div className="min-h-[100dvh] w-full bg-gradient-to-b from-slate-950 via-[#0a0f1d] to-slate-950 text-white flex flex-col justify-center items-center selection:bg-[#ed0b08] selection:text-white p-2 sm:p-4 lg:p-6 overflow-x-hidden">
       {/* Main Canvas: Centered iPhone Frame */}
-      <div className="flex-1 w-full flex items-center justify-center py-3 sm:py-6">
+      <div className="flex-1 w-full flex items-center justify-center py-2 sm:py-4">
         <div className="w-[min(425px,94vw)] max-h-[880px] drop-shadow-[0_25px_45px_rgba(0,0,0,0.6)] transition-all duration-300">
           <Iphone className="shadow-2xl">
             {appContent}

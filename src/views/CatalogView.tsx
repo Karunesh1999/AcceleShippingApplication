@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Search, Sparkles, Filter, ChevronRight, Check, BookOpen, Truck } from "lucide-react";
+import { Search, Filter, ChevronRight, Check, BookOpen, Truck } from "lucide-react";
 import { acceleProducts, Product } from "../data/products";
 import { Input } from "../components/ui/input";
 import { Badge } from "../components/ui/badge";
@@ -62,7 +62,7 @@ export function CatalogView({
       <div className="rounded-2xl border border-red-100 bg-gradient-to-r from-red-50/80 to-white p-3 flex items-center justify-between shadow-2xs">
         <div className="flex items-center gap-2">
           <div className="grid h-7 w-7 place-items-center rounded-lg bg-[#ed0b08] text-white shrink-0">
-            <Sparkles size={14} />
+            <Check size={14} strokeWidth={2.5} />
           </div>
           <div>
             <p className="text-xs font-bold text-slate-900 leading-tight">

@@ -4,7 +4,6 @@ import {
   ShieldCheck,
   Plus,
   Trash2,
-  Sparkles,
   RotateCcw,
 } from "lucide-react";
 import { Button } from "../components/ui/button";
@@ -284,9 +283,9 @@ export function ProfileView({
                 variant="outline"
                 size="sm"
                 onClick={onRestartOnboarding}
-                className="text-[10px] font-bold gap-1 h-7 px-2.5"
+                className="text-[10px] font-bold h-7 px-2.5"
               >
-                <Sparkles size={12} className="text-[#ed0b08]" /> Replay Tour
+                Replay Tour
               </Button>
             )}
             {onRestartSplash && (

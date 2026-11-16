@@ -1,5 +1,5 @@
 import { useState, useEffect, type HTMLAttributes, type ReactNode } from "react";
-import { Wifi, Battery, Sparkles } from "lucide-react";
+import { Wifi, Battery } from "lucide-react";
 
 const PHONE_WIDTH = 433;
 const PHONE_HEIGHT = 882;
