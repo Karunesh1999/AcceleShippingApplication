@@ -54,60 +54,60 @@ export function TrackView({ shipments, onOpenShipment }: TrackViewProps) {
   };
 
   return (
-    <div className="space-y-6 sm:space-y-8">
+    <div className="space-y-4">
       {/* Title */}
       <div>
-        <span className="text-xs font-bold text-[#ed0b08] uppercase tracking-wider">
-          Accele GPS Telematics
+        <span className="text-[10px] font-bold text-[#ed0b08] uppercase tracking-wider">
+          GPS Telematics
         </span>
-        <h1 className="text-xl sm:text-3xl font-extrabold tracking-tight text-slate-950 mt-1">
+        <h2 className="text-lg font-extrabold tracking-tight text-slate-950 leading-tight">
           Track a Shipment
-        </h1>
-        <p className="text-xs sm:text-sm text-slate-500 mt-1">
-          Enter your 10-digit Accele tracking number for real-time fleet GPS coordinates and delivery updates.
+        </h2>
+        <p className="text-[11px] text-slate-500 mt-0.5">
+          Enter tracking # for real-time fleet GPS coordinates.
         </p>
       </div>
 
       {/* Tracking Search Card */}
-      <div className="rounded-2xl sm:rounded-3xl border border-slate-200/90 bg-white p-4 sm:p-6 shadow-sm">
-        <form onSubmit={handleSearch} className="flex flex-col sm:flex-row gap-2.5 sm:gap-3">
-          <div className="relative flex-1">
+      <div className="rounded-2xl border border-slate-200/90 bg-white p-3.5 shadow-xs space-y-2.5">
+        <form onSubmit={handleSearch} className="space-y-2">
+          <div className="relative">
             <Search
-              size={18}
-              className="absolute left-3.5 sm:left-4 top-1/2 -translate-y-1/2 text-slate-400"
+              size={15}
+              className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"
             />
             <Input
               value={searchValue}
               onChange={(e) => setSearchValue(e.target.value)}
               placeholder="e.g. AC82910472"
-              className="pl-10 sm:pl-11 h-11 sm:h-12 text-sm font-mono"
+              className="pl-8.5 h-9 text-xs font-mono"
             />
           </div>
-          <div className="grid grid-cols-2 sm:flex items-center gap-2">
-            <Button type="submit" variant="brand" size="lg" className="font-bold sm:px-8 text-xs sm:text-sm h-11 sm:h-12 w-full justify-center">
-              Track Package
+          <div className="grid grid-cols-2 gap-2">
+            <Button type="submit" variant="brand" size="sm" className="font-bold text-xs h-9">
+              Track
             </Button>
             <Button
               type="button"
               variant="outline"
-              size="lg"
+              size="sm"
               onClick={simulateScan}
-              className="gap-2 text-slate-700 text-xs sm:text-sm h-11 sm:h-12 w-full justify-center"
+              className="gap-1.5 text-slate-700 text-xs h-9"
             >
-              <Scan size={17} />
-              <span>Scan Label</span>
+              <Scan size={14} />
+              <span>Scan Barcode</span>
             </Button>
           </div>
         </form>
 
         {/* Quick Sample IDs */}
-        <div className="mt-4 flex flex-wrap items-center gap-2 pt-3 border-t border-slate-100">
-          <span className="text-xs text-slate-400 font-medium">Quick IDs:</span>
+        <div className="flex flex-wrap items-center gap-1.5 pt-2 border-t border-slate-100">
+          <span className="text-[10px] text-slate-400 font-medium">Quick IDs:</span>
           {shipments.slice(0, 3).map((s) => (
             <button
               key={s.id}
               onClick={() => handleSelectQuickId(s.id)}
-              className="rounded-lg bg-slate-100 px-2.5 py-1 text-xs font-mono font-bold text-slate-700 hover:bg-red-50 hover:text-[#ed0b08] transition-colors"
+              className="rounded-md bg-slate-100 px-2 py-0.5 text-[10px] font-mono font-bold text-slate-700 hover:bg-red-50 hover:text-[#ed0b08] transition-colors cursor-pointer"
             >
               #{s.id}
             </button>
@@ -118,21 +118,17 @@ export function TrackView({ shipments, onOpenShipment }: TrackViewProps) {
       {/* Barcode Scanner Modal Simulation */}
       {isScanning && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 p-4 backdrop-blur-md">
-          <div className="relative w-full max-w-sm rounded-3xl bg-slate-900 p-6 sm:p-8 text-center text-white border border-white/10 shadow-2xl">
-            <div className="relative mx-auto h-44 w-44 sm:h-52 sm:w-52 rounded-2xl border-2 border-red-500/80 p-3 overflow-hidden bg-black/40 flex items-center justify-center">
-              {/* Scan laser line animation */}
+          <div className="relative w-full max-w-xs rounded-3xl bg-slate-900 p-5 text-center text-white border border-white/10 shadow-2xl">
+            <div className="relative mx-auto h-36 w-36 rounded-2xl border-2 border-red-500/80 p-2 overflow-hidden bg-black/40 flex items-center justify-center">
               <div className="absolute inset-x-0 h-0.5 bg-red-500 shadow-[0_0_12px_#ed0b08] animate-bounce" />
-              <Camera size={44} className="text-white/20" />
+              <Camera size={36} className="text-white/20" />
             </div>
-            <p className="mt-5 text-sm font-bold">Scanning Accele Barcode...</p>
-            <p className="mt-1 text-xs text-slate-400">
-              Align barcode inside the camera frame
-            </p>
+            <p className="mt-4 text-xs font-bold">Scanning Accele Barcode...</p>
             <Button
               variant="outline"
               size="sm"
               onClick={() => setIsScanning(false)}
-              className="mt-5 border-white/20 text-white hover:bg-white/10"
+              className="mt-4 border-white/20 text-white hover:bg-white/10 text-xs h-8"
             >
               Cancel Scan
             </Button>
@@ -142,107 +138,85 @@ export function TrackView({ shipments, onOpenShipment }: TrackViewProps) {
 
       {/* Matched Shipment Display */}
       {matchedShipment ? (
-        <div className="rounded-2xl sm:rounded-3xl border border-slate-200 bg-white overflow-hidden shadow-sm">
+        <div className="rounded-2xl border border-slate-200 bg-white overflow-hidden shadow-xs">
           {/* Header */}
-          <div className="bg-slate-950 p-5 sm:p-6 text-white flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-            <div>
-              <div className="flex items-center gap-2">
-                <Badge variant="brand">{matchedShipment.status}</Badge>
-                <span className="text-xs font-mono text-slate-400">
-                  #{matchedShipment.id}
-                </span>
-              </div>
-              <h2 className="text-lg sm:text-2xl font-bold mt-2">
-                {matchedShipment.item}
-              </h2>
-              <p className="text-xs text-slate-400 mt-0.5">
-                {matchedShipment.service} · Carrier: {matchedShipment.carrier}
-              </p>
-            </div>
-
-            <div className="sm:text-right">
-              <span className="text-[10px] sm:text-xs uppercase tracking-wider text-slate-400 font-semibold">
-                Estimated Delivery
+          <div className="bg-slate-950 p-3.5 text-white">
+            <div className="flex items-center justify-between">
+              <Badge variant="brand" className="text-[9px] py-0 px-1.5">{matchedShipment.status}</Badge>
+              <span className="text-[10px] font-mono text-slate-400">
+                #{matchedShipment.id}
               </span>
-              <p className="text-lg sm:text-xl font-bold text-red-400 mt-0.5">
-                {matchedShipment.eta}
-              </p>
+            </div>
+            <h3 className="text-sm font-bold mt-1.5 truncate">
+              {matchedShipment.item}
+            </h3>
+            <p className="text-[10px] text-slate-400 mt-0.5">
+              {matchedShipment.service}
+            </p>
+            <div className="mt-2 pt-2 border-t border-white/10 flex justify-between items-center text-[10px]">
+              <span className="text-slate-400">Estimated Delivery:</span>
+              <span className="font-bold text-red-300">{matchedShipment.eta}</span>
             </div>
           </div>
 
           {/* Progress Route */}
-          <div className="p-4 sm:p-6 border-b border-slate-100">
-            <div className="flex items-center justify-between text-xs font-semibold text-slate-700 mb-2 gap-2">
-              <div className="flex items-center gap-1.5 truncate">
-                <MapPin size={14} className="text-slate-400 shrink-0" />
-                <span className="truncate">
-                  {matchedShipment.from.city}, {matchedShipment.from.state}
-                </span>
+          <div className="p-3.5 border-b border-slate-100">
+            <div className="flex items-center justify-between text-[11px] font-semibold text-slate-700 mb-1.5 gap-2">
+              <div className="flex items-center gap-1 truncate">
+                <MapPin size={12} className="text-slate-400 shrink-0" />
+                <span className="truncate">{matchedShipment.from.city}, {matchedShipment.from.state}</span>
               </div>
-              <div className="flex items-center gap-1.5 truncate text-right">
-                <MapPin size={14} className="text-[#ed0b08] shrink-0" />
-                <span className="truncate">
-                  {matchedShipment.to.city}, {matchedShipment.to.state}
-                </span>
+              <div className="flex items-center gap-1 truncate text-right">
+                <MapPin size={12} className="text-[#ed0b08] shrink-0" />
+                <span className="truncate">{matchedShipment.to.city}, {matchedShipment.to.state}</span>
               </div>
             </div>
 
-            <div className="h-2 w-full bg-slate-100 rounded-full overflow-hidden">
+            <div className="h-1.5 w-full bg-slate-100 rounded-full overflow-hidden">
               <div
                 className="h-full bg-gradient-to-r from-red-500 to-[#ed0b08] rounded-full transition-all duration-700"
                 style={{ width: `${matchedShipment.progress}%` }}
               />
             </div>
-
-            <div className="mt-2 flex justify-between text-[10px] sm:text-[11px] text-slate-400">
-              <span>Dispatched</span>
-              <span>In Transit ({matchedShipment.progress}%)</span>
-              <span>Delivered</span>
-            </div>
           </div>
 
-          {/* Detailed Activity Stepper */}
-          <div className="p-4 sm:p-6 space-y-4">
-            <h4 className="text-xs font-bold uppercase tracking-wider text-slate-500 mb-3">
-              Route Checkpoints
+          {/* Stepper */}
+          <div className="p-3.5 space-y-3">
+            <h4 className="text-[10px] font-bold uppercase tracking-wider text-slate-400">
+              Checkpoints
             </h4>
 
-            <div className="space-y-4">
-              {matchedShipment.steps.map((step, idx) => {
+            <div className="space-y-3">
+              {matchedShipment.steps.slice(0, 3).map((step, idx) => {
                 const isCompleted = step.status === "completed";
                 const isCurrent = step.status === "current";
 
                 return (
-                  <div key={idx} className="flex items-start gap-3">
+                  <div key={idx} className="flex items-start gap-2.5">
                     <div
-                      className={`grid h-6 w-6 sm:h-7 sm:w-7 shrink-0 place-items-center rounded-full text-xs font-bold ${
+                      className={`grid h-5 w-5 shrink-0 place-items-center rounded-full text-[10px] font-bold ${
                         isCompleted
                           ? "bg-emerald-500 text-white"
                           : isCurrent
-                          ? "bg-[#ed0b08] text-white ring-4 ring-red-100"
+                          ? "bg-[#ed0b08] text-white ring-2 ring-red-100"
                           : "bg-slate-100 text-slate-400"
                       }`}
                     >
-                      {isCompleted ? <CheckCircle2 size={15} /> : idx + 1}
+                      {isCompleted ? <CheckCircle2 size={12} /> : idx + 1}
                     </div>
 
                     <div className="min-w-0 flex-1">
-                      <div className="flex flex-wrap items-center justify-between gap-1">
+                      <div className="flex items-center justify-between gap-1">
                         <p
-                          className={`text-xs sm:text-sm font-bold ${
+                          className={`text-xs font-bold truncate ${
                             isCurrent ? "text-[#ed0b08]" : "text-slate-900"
                           }`}
                         >
                           {step.title}
                         </p>
-                        <span className="text-[10px] sm:text-xs text-slate-400">{step.timestamp}</span>
+                        <span className="text-[9px] text-slate-400 shrink-0">{step.timestamp}</span>
                       </div>
-                      <p className="text-[11px] sm:text-xs text-slate-500 font-medium">{step.location}</p>
-                      {step.description && (
-                        <p className="mt-1 text-[11px] sm:text-xs text-slate-600 bg-slate-50 rounded-lg p-2 border border-slate-100">
-                          {step.description}
-                        </p>
-                      )}
+                      <p className="text-[10px] text-slate-500 truncate">{step.location}</p>
                     </div>
                   </div>
                 );
@@ -250,23 +224,23 @@ export function TrackView({ shipments, onOpenShipment }: TrackViewProps) {
             </div>
           </div>
 
-          {/* Action Bar */}
-          <div className="bg-slate-50 p-4 border-t border-slate-100 flex items-center justify-end">
+          {/* Action */}
+          <div className="bg-slate-50 p-2.5 border-t border-slate-100 flex items-center justify-end">
             <Button
               variant="brand"
               size="sm"
               onClick={() => onOpenShipment(matchedShipment)}
-              className="gap-1.5 font-bold"
+              className="gap-1 font-bold text-xs h-8"
             >
-              Full Details Modal <ArrowRight size={14} />
+              Full Details <ArrowRight size={13} />
             </Button>
           </div>
         </div>
       ) : hasSearched ? (
-        <div className="rounded-2xl sm:rounded-3xl border border-dashed border-slate-300 bg-white p-8 sm:p-12 text-center">
-          <h3 className="text-base font-bold text-slate-900">Tracking Number Not Found</h3>
-          <p className="text-xs text-slate-500 mt-1 max-w-sm mx-auto">
-            We could not locate shipment records matching "{searchValue}". Check the digits on your Accele shipping manifest or receipt.
+        <div className="rounded-2xl border border-dashed border-slate-300 bg-white p-6 text-center">
+          <h3 className="text-xs font-bold text-slate-900">Tracking Number Not Found</h3>
+          <p className="text-[10px] text-slate-500 mt-0.5">
+            No records for "{searchValue}".
           </p>
         </div>
       ) : null}

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   initialShipments,
   initialNotifications,
@@ -17,12 +17,16 @@ import { CreateShipmentModal } from "./components/CreateShipmentModal";
 import { QuoteCalculatorModal } from "./components/QuoteCalculatorModal";
 import { SupportModal } from "./components/SupportModal";
 import { SchedulePickupModal } from "./components/SchedulePickupModal";
+import { Iphone } from "./components/ui/iphone";
 import {
   Home as HomeIcon,
   Package,
   ScanLine,
   User,
   CheckCircle2,
+  Smartphone,
+  Maximize2,
+  Sparkles,
 } from "lucide-react";
 
 export default function App() {
@@ -31,6 +35,52 @@ export default function App() {
     "splash"
   );
   const [activePage, setActivePage] = useState<string>("home");
+
+  // State to track whether user is inspecting or on mobile screen
+  const [isMobileOrInspecting, setIsMobileOrInspecting] = useState(false);
+  // Manual override toggle if user explicitly wants to switch
+  const [manualFrameToggle, setManualFrameToggle] = useState<boolean | null>(null);
+
+  useEffect(() => {
+    const evaluateScreen = () => {
+      // Mobile screen or DevTools device mode (width < 900px)
+      const isMobileWidth = window.innerWidth < 900;
+      // DevTools docked open detection (difference between outer and inner window dimensions)
+      const isDockedDevTools =
+        window.outerWidth - window.innerWidth > 160 ||
+        window.outerHeight - window.innerHeight > 160;
+
+      setIsMobileOrInspecting(isMobileWidth || isDockedDevTools);
+    };
+
+    evaluateScreen();
+    window.addEventListener("resize", evaluateScreen);
+
+    // Detect F12 key or Ctrl+Shift+I / Ctrl+Shift+J / Ctrl+Shift+C (Inspect shortcuts)
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (
+        e.key === "F12" ||
+        (e.ctrlKey &&
+          e.shiftKey &&
+          ["I", "i", "J", "j", "C", "c"].includes(e.key))
+      ) {
+        setIsMobileOrInspecting(true);
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      window.removeEventListener("resize", evaluateScreen);
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, []);
+
+  // Determine whether to display inside iPhone wrapper
+  // On desktop (width >= 900 and not inspecting), wrapper is shown.
+  // When F12 is pressed or mobile/inspect mode is active, wrapper is hidden.
+  const showIphoneWrapper =
+    manualFrameToggle !== null ? manualFrameToggle : !isMobileOrInspecting;
 
   // State collections
   const [shipments, setShipments] = useState<Shipment[]>(initialShipments);
@@ -114,147 +164,225 @@ export default function App() {
     { key: "profile", label: "Account", icon: User },
   ];
 
-  // 1. Initial Splash Screen
-  if (flowState === "splash") {
-    return (
-      <SplashScreen
-        onComplete={() => setFlowState("onboarding")}
-      />
-    );
-  }
-
-  // 2. Onboarding Carousel Screen
-  if (flowState === "onboarding") {
-    return (
-      <OnboardingScreen
-        onFinish={() => setFlowState("app")}
-      />
-    );
-  }
-
-  // 3. Main Logistics Portal
-  return (
-    <div className="min-h-[100dvh] bg-[#f4f5f7] text-slate-900 selection:bg-[#ed0b08] selection:text-white antialiased flex flex-col justify-between">
-      {/* Toast popup */}
-      {toastMessage && (
-        <div className="fixed top-4 left-1/2 -translate-x-1/2 z-50 flex items-center gap-2.5 rounded-full bg-slate-950 px-4 py-2 sm:px-5 sm:py-2.5 text-xs font-bold text-white shadow-2xl border border-white/10 animate-in fade-in slide-in-from-top-4 duration-200 w-[90%] max-w-sm justify-center">
-          <CheckCircle2 size={16} className="text-emerald-400 shrink-0" />
-          <span className="truncate">{toastMessage}</span>
-        </div>
+  // Core application content (Splash, Onboarding, or Portal)
+  const appContent = (
+    <div className="relative min-h-full w-full bg-[#f8f9fa] text-slate-900 selection:bg-[#ed0b08] selection:text-white flex flex-col justify-between">
+      {/* 1. Splash Screen */}
+      {flowState === "splash" && (
+        <SplashScreen onComplete={() => setFlowState("onboarding")} />
       )}
 
-      {/* Main App Container */}
-      <div className="mx-auto w-full min-h-[100dvh] max-w-6xl bg-white shadow-[0_0_50px_rgba(15,23,42,0.04)] flex flex-col">
-        {/* Header with Safe Area Top */}
-        <Header
-          notifications={notifications}
-          onMarkNotificationRead={handleMarkNotificationRead}
-          onClearAllNotifications={handleClearAllNotifications}
-          activePage={activePage}
-          setActivePage={setActivePage}
-          onCreateShipment={() => setIsCreatingShipment(true)}
-        />
+      {/* 2. Onboarding Carousel Screen */}
+      {flowState === "onboarding" && (
+        <OnboardingScreen onFinish={() => setFlowState("app")} />
+      )}
 
-        {/* Dynamic Page Views with Bottom Padding for Mobile Nav */}
-        <main className="flex-1 px-3 sm:px-6 lg:px-8 pt-4 sm:pt-6 pb-28 md:pb-12">
-          {activePage === "home" && (
-            <HomeView
-              shipments={shipments}
-              onOpenShipment={(shipment) => setActiveShipmentDetail(shipment)}
+      {/* 3. Main Logistics Portal */}
+      {flowState === "app" && (
+        <>
+          {/* Toast popup */}
+          {toastMessage && (
+            <div className="fixed top-3 left-1/2 -translate-x-1/2 z-50 flex items-center gap-2 rounded-full bg-slate-950 px-4 py-2 text-xs font-bold text-white shadow-2xl border border-white/10 animate-in fade-in slide-in-from-top-4 duration-200 w-[90%] max-w-xs justify-center">
+              <CheckCircle2 size={15} className="text-emerald-400 shrink-0" />
+              <span className="truncate">{toastMessage}</span>
+            </div>
+          )}
+
+          <div className="w-full flex-1 flex flex-col">
+            {/* Header */}
+            <Header
+              notifications={notifications}
+              onMarkNotificationRead={handleMarkNotificationRead}
+              onClearAllNotifications={handleClearAllNotifications}
+              activePage={activePage}
+              setActivePage={setActivePage}
               onCreateShipment={() => setIsCreatingShipment(true)}
-              onTrack={() => setActivePage("track")}
-              onQuote={() => setIsQuoteOpen(true)}
-              onSupport={() => setIsSupportOpen(true)}
-              onSchedulePickup={() => setIsPickupOpen(true)}
-              onViewAllShipments={() => setActivePage("shipments")}
-              onCopyId={handleCopyId}
             />
+
+            {/* Main Views Container */}
+            <main className="flex-1 px-3 sm:px-5 pt-3 sm:pt-4 pb-24">
+              {activePage === "home" && (
+                <HomeView
+                  shipments={shipments}
+                  onOpenShipment={(shipment) => setActiveShipmentDetail(shipment)}
+                  onCreateShipment={() => setIsCreatingShipment(true)}
+                  onTrack={() => setActivePage("track")}
+                  onQuote={() => setIsQuoteOpen(true)}
+                  onSupport={() => setIsSupportOpen(true)}
+                  onSchedulePickup={() => setIsPickupOpen(true)}
+                  onViewAllShipments={() => setActivePage("shipments")}
+                  onCopyId={handleCopyId}
+                />
+              )}
+
+              {activePage === "shipments" && (
+                <ShipmentsView
+                  shipments={shipments}
+                  onOpenShipment={(shipment) => setActiveShipmentDetail(shipment)}
+                  onCreateShipment={() => setIsCreatingShipment(true)}
+                  onCopyId={handleCopyId}
+                />
+              )}
+
+              {activePage === "track" && (
+                <TrackView
+                  shipments={shipments}
+                  onOpenShipment={(shipment) => setActiveShipmentDetail(shipment)}
+                />
+              )}
+
+              {activePage === "profile" && (
+                <ProfileView
+                  addresses={addresses}
+                  onAddAddress={handleAddAddress}
+                  onDeleteAddress={handleDeleteAddress}
+                  onSetDefaultAddress={handleSetDefaultAddress}
+                  onRestartOnboarding={() => setFlowState("onboarding")}
+                  onRestartSplash={() => setFlowState("splash")}
+                />
+              )}
+            </main>
+
+            {/* Mobile Bottom Navigation Bar */}
+            <nav className="fixed bottom-0 left-0 right-0 z-40 flex items-center justify-around border-t border-slate-200/90 bg-white/95 px-2 pt-2 pb-[max(10px,env(safe-area-inset-bottom))] backdrop-blur-xl shadow-[0_-4px_20px_rgba(0,0,0,0.05)]">
+              {navigation.map((item) => {
+                const Icon = item.icon;
+                const isActive = activePage === item.key;
+                return (
+                  <button
+                    key={item.key}
+                    onClick={() => setActivePage(item.key)}
+                    className={`flex min-w-[56px] flex-col items-center gap-1 rounded-xl px-2 py-1 text-[10px] font-bold transition-all cursor-pointer ${
+                      isActive
+                        ? "text-[#ed0b08] scale-105"
+                        : "text-slate-400 hover:text-slate-700 active:scale-95"
+                    }`}
+                  >
+                    <Icon size={19} className={isActive ? "stroke-[2.5]" : "stroke-2"} />
+                    <span>{item.label}</span>
+                  </button>
+                );
+              })}
+            </nav>
+          </div>
+
+          {/* Global Modals */}
+          <ShipmentDetailModal
+            shipment={activeShipmentDetail}
+            onClose={() => setActiveShipmentDetail(null)}
+            onCopyId={handleCopyId}
+          />
+
+          <CreateShipmentModal
+            isOpen={isCreatingShipment}
+            onClose={() => setIsCreatingShipment(false)}
+            onShipmentCreated={handleCreateShipment}
+          />
+
+          <QuoteCalculatorModal
+            isOpen={isQuoteOpen}
+            onClose={() => setIsQuoteOpen(false)}
+            onBookShipment={() => setIsCreatingShipment(true)}
+          />
+
+          <SupportModal
+            isOpen={isSupportOpen}
+            onClose={() => setIsSupportOpen(false)}
+          />
+
+          <SchedulePickupModal
+            isOpen={isPickupOpen}
+            onClose={() => setIsPickupOpen(false)}
+          />
+        </>
+      )}
+    </div>
+  );
+
+  /* Case 1: When on Mobile, Inspecting / F12 pressed -> HIDE iPhone wrapper, render native 100% full screen */
+  if (!showIphoneWrapper) {
+    return (
+      <div className="min-h-[100dvh] w-full bg-[#f8f9fa] text-slate-900 safe-top safe-bottom flex flex-col justify-between">
+        {/* Floating Desktop Restore Button if in DevTools mode */}
+        {isMobileOrInspecting && (
+          <button
+            onClick={() => setManualFrameToggle(true)}
+            className="fixed bottom-18 right-3 z-50 flex items-center gap-1.5 rounded-full bg-slate-950/80 hover:bg-slate-950 text-white px-3 py-1.5 text-[10px] font-bold shadow-lg backdrop-blur-md border border-white/20 transition-all opacity-70 hover:opacity-100"
+            title="Switch back to iPhone Wrapper View"
+          >
+            <Smartphone size={13} className="text-[#ed0b08]" />
+            <span>iPhone Frame</span>
+          </button>
+        )}
+        {appContent}
+      </div>
+    );
+  }
+
+  /* Case 2: On Normal Desktop Screen -> Render inside realistic iPhone 16 Pro mockup wrapper */
+  return (
+    <div className="min-h-[100dvh] w-full bg-gradient-to-b from-slate-950 via-[#0a0f1d] to-slate-950 text-white flex flex-col justify-between items-center selection:bg-[#ed0b08] selection:text-white p-3 sm:p-5 lg:p-6 overflow-x-hidden">
+      {/* Top Studio Bar */}
+      <header className="w-full max-w-4xl flex items-center justify-between pb-3 sm:pb-4 border-b border-white/10 shrink-0">
+        <div className="flex items-center gap-2.5">
+          <img
+            src="/assets/accele-mark.png"
+            alt="Accele"
+            className="h-6 sm:h-7 w-auto object-contain"
+          />
+          <div>
+            <h1 className="text-xs sm:text-sm font-bold text-white tracking-tight flex items-center gap-2">
+              <span>Accele Logistics Portal</span>
+              <span className="rounded-full bg-red-500/20 text-red-300 text-[10px] px-2 py-0.5 border border-red-500/30">
+                Desktop iPhone Preview
+              </span>
+            </h1>
+          </div>
+        </div>
+
+        {/* Action Controls */}
+        <div className="flex items-center gap-2">
+          {flowState === "app" && (
+            <button
+              onClick={() => setFlowState("onboarding")}
+              className="hidden sm:flex items-center gap-1.5 rounded-lg border border-white/15 bg-white/5 px-2.5 py-1.5 text-xs font-semibold text-slate-300 hover:text-white hover:bg-white/10 transition-colors cursor-pointer"
+              title="Replay Onboarding"
+            >
+              <Sparkles size={13} className="text-[#ed0b08]" />
+              <span>Tour</span>
+            </button>
           )}
 
-          {activePage === "shipments" && (
-            <ShipmentsView
-              shipments={shipments}
-              onOpenShipment={(shipment) => setActiveShipmentDetail(shipment)}
-              onCreateShipment={() => setIsCreatingShipment(true)}
-              onCopyId={handleCopyId}
-            />
-          )}
+          {/* Toggle Full Screen */}
+          <button
+            onClick={() => setManualFrameToggle(false)}
+            className="flex items-center gap-1.5 rounded-xl border border-white/20 bg-white/10 px-3 py-1.5 text-xs font-bold text-white hover:bg-white/20 transition-all cursor-pointer active:scale-95"
+            title="Inspect / Edge-to-Edge Mode"
+          >
+            <Maximize2 size={13} />
+            <span className="hidden xs:inline">Inspect Mode</span>
+          </button>
+        </div>
+      </header>
 
-          {activePage === "track" && (
-            <TrackView
-              shipments={shipments}
-              onOpenShipment={(shipment) => setActiveShipmentDetail(shipment)}
-            />
-          )}
-
-          {activePage === "profile" && (
-            <ProfileView
-              addresses={addresses}
-              onAddAddress={handleAddAddress}
-              onDeleteAddress={handleDeleteAddress}
-              onSetDefaultAddress={handleSetDefaultAddress}
-              onRestartOnboarding={() => setFlowState("onboarding")}
-              onRestartSplash={() => setFlowState("splash")}
-            />
-          )}
-        </main>
-
-        {/* Footer (Desktop & Tablet) */}
-        <footer className="border-t border-slate-100 bg-slate-50/80 py-6 px-4 sm:px-6 lg:px-8 text-center text-xs text-slate-400 hidden md:block">
-          <p>© 2026 Accele Electronics, Inc. All rights reserved. 30+ Years of Quality & Automotive Innovation.</p>
-        </footer>
-
-        {/* Mobile Floating Bottom Bar with Safe Area Bottom */}
-        <nav className="fixed bottom-0 left-0 right-0 z-40 flex items-center justify-around border-t border-slate-200/90 bg-white/95 px-2 pt-2 pb-[calc(env(safe-area-inset-bottom,0px)+0.5rem)] backdrop-blur-xl md:hidden shadow-[0_-4px_20px_rgba(0,0,0,0.05)]">
-          {navigation.map((item) => {
-            const Icon = item.icon;
-            const isActive = activePage === item.key;
-            return (
-              <button
-                key={item.key}
-                onClick={() => setActivePage(item.key)}
-                className={`flex min-w-[60px] flex-col items-center gap-1 rounded-xl px-2.5 py-1 text-[11px] font-bold transition-all cursor-pointer ${
-                  isActive
-                    ? "text-[#ed0b08] scale-105"
-                    : "text-slate-400 hover:text-slate-700 active:scale-95"
-                }`}
-              >
-                <Icon size={20} className={isActive ? "stroke-[2.5]" : "stroke-2"} />
-                <span>{item.label}</span>
-              </button>
-            );
-          })}
-        </nav>
+      {/* Main Canvas: Centered iPhone Frame */}
+      <div className="flex-1 w-full flex items-center justify-center py-3 sm:py-6">
+        <div className="w-[min(425px,94vw)] max-h-[880px] drop-shadow-[0_25px_45px_rgba(0,0,0,0.6)] transition-all duration-300">
+          <Iphone className="shadow-2xl">
+            {appContent}
+          </Iphone>
+        </div>
       </div>
 
-      {/* Global Modals */}
-      <ShipmentDetailModal
-        shipment={activeShipmentDetail}
-        onClose={() => setActiveShipmentDetail(null)}
-        onCopyId={handleCopyId}
-      />
-
-      <CreateShipmentModal
-        isOpen={isCreatingShipment}
-        onClose={() => setIsCreatingShipment(false)}
-        onShipmentCreated={handleCreateShipment}
-      />
-
-      <QuoteCalculatorModal
-        isOpen={isQuoteOpen}
-        onClose={() => setIsQuoteOpen(false)}
-        onBookShipment={() => setIsCreatingShipment(true)}
-      />
-
-      <SupportModal
-        isOpen={isSupportOpen}
-        onClose={() => setIsSupportOpen(false)}
-      />
-
-      <SchedulePickupModal
-        isOpen={isPickupOpen}
-        onClose={() => setIsPickupOpen(false)}
-      />
+      {/* Studio Footer */}
+      <footer className="w-full max-w-4xl pt-3 border-t border-white/10 flex flex-col xs:flex-row items-center justify-between text-[11px] text-slate-400 gap-2 shrink-0">
+        <p>© 2026 Accele Electronics, Inc. · Commercial Fleet Logistics</p>
+        <div className="flex items-center gap-3 text-[10px] text-slate-500">
+          <span>Press F12 or Inspect to view native mobile screen</span>
+          <span>•</span>
+          <span>iPhone 16 Pro Frame</span>
+        </div>
+      </footer>
     </div>
   );
 }

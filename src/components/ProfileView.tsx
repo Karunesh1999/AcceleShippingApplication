@@ -65,64 +65,53 @@ export function ProfileView({
   };
 
   return (
-    <div className="space-y-6 sm:space-y-8">
+    <div className="space-y-4">
       {/* Title */}
       <div>
-        <span className="text-xs font-bold text-[#ed0b08] uppercase tracking-wider">
-          Account & Logistics Profile
+        <span className="text-[10px] font-bold text-[#ed0b08] uppercase tracking-wider">
+          Account Profile
         </span>
-        <h1 className="text-xl sm:text-3xl font-extrabold tracking-tight text-slate-950 mt-1">
+        <h2 className="text-lg font-extrabold tracking-tight text-slate-950 leading-tight">
           Alex Morgan
-        </h1>
-        <p className="text-xs sm:text-sm text-slate-500 mt-0.5">
-          Operations Lead · Accele Electronics Texas Logistics Center
+        </h2>
+        <p className="text-[11px] text-slate-500 mt-0.5">
+          Operations Lead · Texas Logistics Center
         </p>
       </div>
 
       {/* Account Overview Card */}
-      <div className="rounded-2xl sm:rounded-3xl border border-slate-200 bg-white p-4 sm:p-6 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-5">
-        <div className="flex items-center gap-3.5 sm:gap-4">
-          <div className="grid h-13 w-13 sm:h-16 sm:w-16 place-items-center rounded-2xl bg-slate-950 text-lg sm:text-xl font-extrabold text-white shrink-0">
+      <div className="rounded-2xl border border-slate-200 bg-white p-3.5 shadow-xs flex items-center justify-between gap-3">
+        <div className="flex items-center gap-2.5">
+          <div className="grid h-11 w-11 place-items-center rounded-xl bg-slate-950 text-sm font-extrabold text-white shrink-0">
             AM
           </div>
           <div>
-            <div className="flex items-center gap-2 flex-wrap">
-              <h3 className="text-base sm:text-lg font-bold text-slate-900">Alex Morgan</h3>
-              <Badge variant="brand" className="text-[10px] sm:text-xs">Enterprise Tier 1</Badge>
+            <div className="flex items-center gap-1.5 flex-wrap">
+              <h3 className="text-xs font-bold text-slate-900 leading-tight">Alex Morgan</h3>
+              <Badge variant="brand" className="text-[8px] py-0 px-1">Tier 1</Badge>
             </div>
-            <p className="text-xs text-slate-500 mt-0.5">alex.morgan@accele.com</p>
-            <p className="text-[11px] text-slate-400">Account ID: #ACC-49102-TX</p>
+            <p className="text-[10px] text-slate-500 leading-none mt-1">alex.morgan@accele.com</p>
+            <p className="text-[9px] text-slate-400 mt-0.5">#ACC-49102-TX</p>
           </div>
         </div>
 
-        <div className="grid grid-cols-2 gap-4 border-t md:border-t-0 md:border-l border-slate-100 pt-3.5 md:pt-0 md:pl-6">
-          <div>
-            <p className="text-[10px] sm:text-xs font-semibold text-slate-400">Monthly Dispatches</p>
-            <p className="text-lg sm:text-xl font-extrabold text-slate-950 mt-0.5">148 Units</p>
-          </div>
-          <div>
-            <p className="text-[10px] sm:text-xs font-semibold text-slate-400">Preferred Speed</p>
-            <p className="text-lg sm:text-xl font-extrabold text-[#ed0b08] mt-0.5">2-Day Air</p>
-          </div>
+        <div className="text-right border-l border-slate-100 pl-3">
+          <p className="text-[9px] font-semibold text-slate-400">Monthly Ship</p>
+          <p className="text-sm font-extrabold text-[#ed0b08]">148 Units</p>
         </div>
       </div>
 
-      {/* Saved Facilities / Addresses */}
-      <div className="space-y-3.5 sm:space-y-4">
+      {/* Saved Facilities */}
+      <div className="space-y-2.5">
         <div className="flex items-center justify-between gap-2">
-          <div>
-            <h3 className="text-base sm:text-lg font-bold text-slate-950">Saved Facilities & Warehouses</h3>
-            <p className="text-xs text-slate-400 hidden xs:block">
-              Preset dispatch hubs and verified delivery destinations
-            </p>
-          </div>
+          <h3 className="text-xs font-bold text-slate-950">Saved Facilities</h3>
           <Button
             variant="outline"
             size="sm"
             onClick={() => setShowAddAddress(!showAddAddress)}
-            className="text-xs font-bold gap-1 shrink-0"
+            className="text-[10px] font-bold gap-1 h-7 px-2"
           >
-            <Plus size={14} /> Add Address
+            <Plus size={12} /> Add
           </Button>
         </div>
 
@@ -130,141 +119,124 @@ export function ProfileView({
         {showAddAddress && (
           <form
             onSubmit={handleCreateAddress}
-            className="rounded-2xl border border-red-200 bg-red-50/20 p-4 sm:p-5 space-y-3.5 sm:space-y-4 animate-in fade-in"
+            className="rounded-2xl border border-red-200 bg-red-50/20 p-3 space-y-2.5 animate-in fade-in"
           >
-            <h4 className="text-xs font-bold uppercase tracking-wider text-[#ed0b08]">
-              Register New Facility / Address
+            <h4 className="text-[10px] font-bold uppercase tracking-wider text-[#ed0b08]">
+              Register New Facility
             </h4>
 
-            <div className="grid sm:grid-cols-2 gap-3">
-              <div>
-                <label className="block text-xs font-semibold text-slate-600 mb-1">
-                  Location Nickname
-                </label>
-                <Input
-                  placeholder="e.g. Dallas Fleet Outfitter"
-                  value={newLabel}
-                  onChange={(e) => setNewLabel(e.target.value)}
-                  required
-                />
-              </div>
-              <div>
-                <label className="block text-xs font-semibold text-slate-600 mb-1">
-                  Contact Person / Dock Lead
-                </label>
-                <Input
-                  placeholder="e.g. John Miller"
-                  value={newName}
-                  onChange={(e) => setNewName(e.target.value)}
-                  required
-                />
-              </div>
-            </div>
-
             <div>
-              <label className="block text-xs font-semibold text-slate-600 mb-1">
-                Street Address
-              </label>
               <Input
-                placeholder="e.g. 5200 Industrial Way, Bay 3"
+                placeholder="Facility Name (e.g. Dallas Outfitter)"
+                value={newLabel}
+                onChange={(e) => setNewLabel(e.target.value)}
+                required
+                className="h-8 text-xs"
+              />
+            </div>
+            <div>
+              <Input
+                placeholder="Contact Person (e.g. John Miller)"
+                value={newName}
+                onChange={(e) => setNewName(e.target.value)}
+                required
+                className="h-8 text-xs"
+              />
+            </div>
+            <div>
+              <Input
+                placeholder="Street (e.g. 5200 Industrial Way)"
                 value={newStreet}
                 onChange={(e) => setNewStreet(e.target.value)}
                 required
+                className="h-8 text-xs"
               />
             </div>
 
-            <div className="grid grid-cols-1 xs:grid-cols-3 gap-2.5 sm:gap-3">
-              <div>
-                <label className="block text-xs font-semibold text-slate-600 mb-1">City</label>
-                <Input
-                  placeholder="Dallas"
-                  value={newCity}
-                  onChange={(e) => setNewCity(e.target.value)}
-                  required
-                />
-              </div>
-              <div>
-                <label className="block text-xs font-semibold text-slate-600 mb-1">State</label>
-                <Input
-                  placeholder="TX"
-                  value={newState}
-                  onChange={(e) => setNewState(e.target.value)}
-                  required
-                />
-              </div>
-              <div>
-                <label className="block text-xs font-semibold text-slate-600 mb-1">ZIP</label>
-                <Input
-                  placeholder="75201"
-                  value={newZip}
-                  onChange={(e) => setNewZip(e.target.value)}
-                  required
-                />
-              </div>
+            <div className="grid grid-cols-3 gap-1.5">
+              <Input
+                placeholder="City"
+                value={newCity}
+                onChange={(e) => setNewCity(e.target.value)}
+                required
+                className="h-8 text-xs"
+              />
+              <Input
+                placeholder="TX"
+                value={newState}
+                onChange={(e) => setNewState(e.target.value)}
+                required
+                className="h-8 text-xs"
+              />
+              <Input
+                placeholder="ZIP"
+                value={newZip}
+                onChange={(e) => setNewZip(e.target.value)}
+                required
+                className="h-8 text-xs"
+              />
             </div>
 
-            <div className="flex items-center justify-end gap-2 pt-2">
+            <div className="flex items-center justify-end gap-1.5 pt-1">
               <Button
                 type="button"
                 variant="ghost"
                 size="sm"
                 onClick={() => setShowAddAddress(false)}
+                className="text-[10px] h-7 px-2"
               >
                 Cancel
               </Button>
-              <Button type="submit" variant="brand" size="sm">
-                Save Facility
+              <Button type="submit" variant="brand" size="sm" className="text-[10px] h-7 px-3">
+                Save
               </Button>
             </div>
           </form>
         )}
 
-        <div className="grid gap-3 grid-cols-1 sm:grid-cols-2">
+        <div className="grid gap-2 grid-cols-1">
           {addresses.map((addr) => (
             <div
               key={addr.id}
-              className={`rounded-2xl border p-4 sm:p-5 transition-all bg-white ${
+              className={`rounded-2xl border p-3 transition-all bg-white ${
                 addr.isDefault
-                  ? "border-red-200 ring-2 ring-red-500/10 shadow-sm"
+                  ? "border-red-200 ring-2 ring-red-500/10 shadow-xs"
                   : "border-slate-200 hover:border-slate-300"
               }`}
             >
               <div className="flex items-start justify-between gap-2">
                 <div>
-                  <div className="flex items-center gap-2 flex-wrap">
+                  <div className="flex items-center gap-1.5">
                     <span className="text-xs font-bold text-slate-900">{addr.label}</span>
                     {addr.isDefault && (
-                      <span className="rounded-full bg-red-100 text-[#ed0b08] text-[9px] font-bold px-2 py-0.5">
-                        Default Origin
+                      <span className="rounded-full bg-red-100 text-[#ed0b08] text-[8px] font-bold px-1.5 py-0.2">
+                        Default
                       </span>
                     )}
                   </div>
-                  <p className="text-xs text-slate-500 mt-1">{addr.name}</p>
+                  <p className="text-[10px] text-slate-500">{addr.name}</p>
                 </div>
                 {!addr.isDefault && (
                   <button
                     onClick={() => onDeleteAddress(addr.id)}
-                    className="text-slate-300 hover:text-rose-600 transition-colors p-1"
+                    className="text-slate-300 hover:text-rose-600 transition-colors p-0.5 cursor-pointer"
                     title="Delete address"
                   >
-                    <Trash2 size={15} />
+                    <Trash2 size={13} />
                   </button>
                 )}
               </div>
 
-              <div className="mt-3 text-xs text-slate-600">
+              <div className="mt-2 text-[10px] text-slate-600">
                 <p>{addr.street}</p>
-                <p>
-                  {addr.city}, {addr.state} {addr.zip}
-                </p>
-                <p className="text-slate-400 mt-1">{addr.phone}</p>
+                <p>{addr.city}, {addr.state} {addr.zip}</p>
               </div>
 
               {!addr.isDefault && (
-                <div className="mt-3.5 pt-2.5 border-t border-slate-100 flex justify-end">
+                <div className="mt-2 pt-1.5 border-t border-slate-100 flex justify-end">
                   <button
                     onClick={() => onSetDefaultAddress(addr.id)}
-                    className="text-xs font-semibold text-[#ed0b08] hover:underline"
+                    className="text-[10px] font-semibold text-[#ed0b08] hover:underline cursor-pointer"
                   >
                     Set as default dispatch
                   </button>
@@ -275,51 +247,46 @@ export function ProfileView({
         </div>
       </div>
 
-      {/* Preferences & App Tour */}
-      <div className="rounded-2xl sm:rounded-3xl border border-slate-200 bg-white p-4 sm:p-6 space-y-4">
-        <h3 className="text-base sm:text-lg font-bold text-slate-950">App Experience & Settings</h3>
+      {/* Preferences & Tour Buttons */}
+      <div className="rounded-2xl border border-slate-200 bg-white p-3.5 space-y-3">
+        <h3 className="text-xs font-bold text-slate-950">Preferences</h3>
 
-        <div className="space-y-3">
-          <div className="flex items-center justify-between py-2 border-b border-slate-100 gap-3">
+        <div className="space-y-2">
+          <div className="flex items-center justify-between py-1 border-b border-slate-100 gap-2">
             <div>
-              <p className="text-xs sm:text-sm font-bold text-slate-900">Real-time SMS & Email Tracking Alerts</p>
-              <p className="text-[11px] sm:text-xs text-slate-500">
-                Receive notifications when shipment changes checkpoints.
-              </p>
+              <p className="text-[11px] font-bold text-slate-900">SMS Tracking Alerts</p>
+              <p className="text-[9px] text-slate-500">Milestone checkpoint notifications.</p>
             </div>
             <input
               type="checkbox"
               checked={notificationsEnabled}
               onChange={(e) => setNotificationsEnabled(e.target.checked)}
-              className="h-5 w-5 rounded border-slate-300 text-[#ed0b08] focus:ring-red-500 accent-[#ed0b08] shrink-0"
+              className="h-4 w-4 rounded border-slate-300 text-[#ed0b08] focus:ring-red-500 accent-[#ed0b08] shrink-0"
             />
           </div>
 
-          <div className="flex items-center justify-between py-2 border-b border-slate-100 gap-3">
+          <div className="flex items-center justify-between py-1 border-b border-slate-100 gap-2">
             <div>
-              <p className="text-xs sm:text-sm font-bold text-slate-900">Auto-Apply Cargo Protection</p>
-              <p className="text-[11px] sm:text-xs text-slate-500">
-                Automatically add declared value protection for high-value displays and commercial cameras.
-              </p>
+              <p className="text-[11px] font-bold text-slate-900">Auto Cargo Protection</p>
+              <p className="text-[9px] text-slate-500">Declared value insurance guarantee.</p>
             </div>
             <input
               type="checkbox"
               checked={autoInsuranceEnabled}
               onChange={(e) => setAutoInsuranceEnabled(e.target.checked)}
-              className="h-5 w-5 rounded border-slate-300 text-[#ed0b08] focus:ring-red-500 accent-[#ed0b08] shrink-0"
+              className="h-4 w-4 rounded border-slate-300 text-[#ed0b08] focus:ring-red-500 accent-[#ed0b08] shrink-0"
             />
           </div>
 
-          {/* Replay Onboarding or Splash */}
-          <div className="pt-2 flex flex-wrap gap-2.5">
+          <div className="pt-1 flex flex-wrap gap-2">
             {onRestartOnboarding && (
               <Button
                 variant="outline"
                 size="sm"
                 onClick={onRestartOnboarding}
-                className="text-xs font-bold gap-1.5"
+                className="text-[10px] font-bold gap-1 h-7 px-2.5"
               >
-                <Sparkles size={14} className="text-[#ed0b08]" /> Replay App Tour & Onboarding
+                <Sparkles size={12} className="text-[#ed0b08]" /> Replay Tour
               </Button>
             )}
             {onRestartSplash && (
@@ -327,26 +294,26 @@ export function ProfileView({
                 variant="outline"
                 size="sm"
                 onClick={onRestartSplash}
-                className="text-xs font-bold gap-1.5 text-slate-600"
+                className="text-[10px] font-bold gap-1 text-slate-600 h-7 px-2"
               >
-                <RotateCcw size={14} /> View Splash Screen
+                <RotateCcw size={12} /> Splash
               </Button>
             )}
           </div>
         </div>
       </div>
 
-      {/* 30-Year Accele Electronics Heritage */}
-      <div className="rounded-2xl sm:rounded-3xl bg-slate-950 p-5 sm:p-6 text-white space-y-2.5">
-        <div className="flex items-center gap-2">
-          <ShieldCheck size={18} className="text-[#ed0b08]" />
-          <span className="text-[10px] sm:text-xs font-bold uppercase tracking-widest text-slate-400">
-            Accele Electronics Heritage
+      {/* Heritage */}
+      <div className="rounded-2xl bg-slate-950 p-3.5 text-white space-y-1">
+        <div className="flex items-center gap-1.5">
+          <ShieldCheck size={14} className="text-[#ed0b08]" />
+          <span className="text-[9px] font-bold uppercase tracking-widest text-slate-400">
+            Accele Heritage
           </span>
         </div>
-        <h3 className="text-lg sm:text-xl font-bold">Trusted by Commercial Fleets Since 1990</h3>
-        <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
-          For over three decades, Accele Electronics has engineered automotive safety, 12V mobile entertainment, and commercial vehicle monitoring technology. Our dedicated logistics network ensures critical fleet components reach dealers, outfitting depots, and municipal fleets on time.
+        <p className="text-xs font-bold">Trusted Since 1990</p>
+        <p className="text-[10px] text-slate-300 leading-relaxed">
+          30+ years engineering automotive safety & commercial mobile video.
         </p>
       </div>
     </div>
