@@ -28,9 +28,9 @@ import { RmaModal } from "./components/modals/RmaModal";
 import { Iphone } from "./components/ui/iphone";
 import {
   Home as HomeIcon,
-  Grid,
-  Package,
-  Wrench,
+  ShoppingBag,
+  ShoppingCart,
+  Headphones,
   User,
   CheckCircle2,
   Smartphone,
@@ -205,9 +205,9 @@ export default function App() {
   // 5-Tab Official Accele Companion Navigation
   const navigation = [
     { key: "home", label: "Home", icon: HomeIcon },
-    { key: "catalog", label: "Catalog", icon: Grid },
-    { key: "shipments", label: "Logistics", icon: Package },
-    { key: "techhub", label: "Tech Hub", icon: Wrench },
+    { key: "catalog", label: "Product", icon: ShoppingBag },
+    { key: "shipments", label: "Cart", icon: ShoppingCart },
+    { key: "techhub", label: "Support", icon: Headphones },
     { key: "profile", label: "Account", icon: User },
   ];
 
