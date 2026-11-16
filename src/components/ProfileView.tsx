@@ -4,6 +4,8 @@ import {
   ShieldCheck,
   Plus,
   Trash2,
+  Sparkles,
+  RotateCcw,
 } from "lucide-react";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
@@ -14,6 +16,8 @@ interface ProfileViewProps {
   onAddAddress: (addr: UserAddress) => void;
   onDeleteAddress: (id: string) => void;
   onSetDefaultAddress: (id: string) => void;
+  onRestartOnboarding?: () => void;
+  onRestartSplash?: () => void;
 }
 
 export function ProfileView({
@@ -21,6 +25,8 @@ export function ProfileView({
   onAddAddress,
   onDeleteAddress,
   onSetDefaultAddress,
+  onRestartOnboarding,
+  onRestartSplash,
 }: ProfileViewProps) {
   const [showAddAddress, setShowAddAddress] = useState(false);
   const [newLabel, setNewLabel] = useState("");
@@ -269,9 +275,9 @@ export function ProfileView({
         </div>
       </div>
 
-      {/* Preferences & Settings */}
+      {/* Preferences & App Tour */}
       <div className="rounded-2xl sm:rounded-3xl border border-slate-200 bg-white p-4 sm:p-6 space-y-4">
-        <h3 className="text-base sm:text-lg font-bold text-slate-950">Shipping Preferences</h3>
+        <h3 className="text-base sm:text-lg font-bold text-slate-950">App Experience & Settings</h3>
 
         <div className="space-y-3">
           <div className="flex items-center justify-between py-2 border-b border-slate-100 gap-3">
@@ -302,6 +308,30 @@ export function ProfileView({
               onChange={(e) => setAutoInsuranceEnabled(e.target.checked)}
               className="h-5 w-5 rounded border-slate-300 text-[#ed0b08] focus:ring-red-500 accent-[#ed0b08] shrink-0"
             />
+          </div>
+
+          {/* Replay Onboarding or Splash */}
+          <div className="pt-2 flex flex-wrap gap-2.5">
+            {onRestartOnboarding && (
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={onRestartOnboarding}
+                className="text-xs font-bold gap-1.5"
+              >
+                <Sparkles size={14} className="text-[#ed0b08]" /> Replay App Tour & Onboarding
+              </Button>
+            )}
+            {onRestartSplash && (
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={onRestartSplash}
+                className="text-xs font-bold gap-1.5 text-slate-600"
+              >
+                <RotateCcw size={14} /> View Splash Screen
+              </Button>
+            )}
           </div>
         </div>
       </div>

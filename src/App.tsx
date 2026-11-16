@@ -5,6 +5,8 @@ import {
   sampleAddresses,
 } from "./data/shipments";
 import { Shipment, AppNotification, UserAddress } from "./types";
+import { SplashScreen } from "./components/SplashScreen";
+import { OnboardingScreen } from "./components/OnboardingScreen";
 import { Header } from "./components/Header";
 import { HomeView } from "./components/HomeView";
 import { ShipmentsView } from "./components/ShipmentsView";
@@ -24,6 +26,10 @@ import {
 } from "lucide-react";
 
 export default function App() {
+  // App initialization flow: splash -> onboarding -> app
+  const [flowState, setFlowState] = useState<"splash" | "onboarding" | "app">(
+    "splash"
+  );
   const [activePage, setActivePage] = useState<string>("home");
 
   // State collections
@@ -108,6 +114,25 @@ export default function App() {
     { key: "profile", label: "Account", icon: User },
   ];
 
+  // 1. Initial Splash Screen
+  if (flowState === "splash") {
+    return (
+      <SplashScreen
+        onComplete={() => setFlowState("onboarding")}
+      />
+    );
+  }
+
+  // 2. Onboarding Carousel Screen
+  if (flowState === "onboarding") {
+    return (
+      <OnboardingScreen
+        onFinish={() => setFlowState("app")}
+      />
+    );
+  }
+
+  // 3. Main Logistics Portal
   return (
     <div className="min-h-[100dvh] bg-[#f4f5f7] text-slate-900 selection:bg-[#ed0b08] selection:text-white antialiased flex flex-col justify-between">
       {/* Toast popup */}
@@ -168,6 +193,8 @@ export default function App() {
               onAddAddress={handleAddAddress}
               onDeleteAddress={handleDeleteAddress}
               onSetDefaultAddress={handleSetDefaultAddress}
+              onRestartOnboarding={() => setFlowState("onboarding")}
+              onRestartSplash={() => setFlowState("splash")}
             />
           )}
         </main>
