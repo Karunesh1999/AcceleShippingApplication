@@ -42,73 +42,75 @@ export function QuoteCalculatorModal({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 bg-slate-950/65 backdrop-blur-sm animate-in fade-in duration-200"
+      className="fixed inset-0 z-50 flex items-end justify-center p-0 bg-slate-950/60 backdrop-blur-xs animate-in fade-in duration-200"
       role="dialog"
       aria-modal="true"
       onClick={onClose}
     >
       <div
-        className="w-full max-w-xl rounded-t-[2rem] sm:rounded-3xl bg-white shadow-2xl border border-slate-100 max-h-[90dvh] flex flex-col overflow-hidden animate-in slide-in-from-bottom-8 duration-200"
+        className="w-full rounded-t-[1.75rem] bg-white shadow-2xl border-t border-slate-200 max-h-[88%] flex flex-col overflow-hidden animate-in slide-in-from-bottom-8 duration-200"
         onClick={(e) => e.stopPropagation()}
       >
         {/* iOS Pull / Drag Indicator for Mobile */}
-        <div className="pt-2.5 pb-1 flex justify-center sm:hidden bg-slate-50/70">
-          <div className="h-1.5 w-12 rounded-full bg-slate-300" />
+        <div className="pt-2 pb-1 flex justify-center bg-slate-50/80 shrink-0">
+          <div className="h-1.5 w-10 rounded-full bg-slate-300" />
         </div>
 
-        <div className="flex items-center justify-between border-b border-slate-100 px-5 sm:px-6 py-4 sm:py-5 bg-slate-50/70">
-          <div className="flex items-center gap-2.5 sm:gap-3">
-            <div className="grid h-9 w-9 sm:h-10 sm:w-10 place-items-center rounded-xl bg-red-100 text-[#ed0b08] shrink-0">
-              <Calculator size={19} />
+        <div className="flex items-center justify-between border-b border-slate-100 px-4 py-2.5 bg-slate-50/70 shrink-0">
+          <div className="flex items-center gap-2">
+            <div className="grid h-8 w-8 place-items-center rounded-xl bg-red-100 text-[#ed0b08] shrink-0">
+              <Calculator size={16} />
             </div>
             <div>
-              <p className="text-[10px] sm:text-[11px] font-bold uppercase tracking-wider text-[#ed0b08]">
+              <p className="text-[10px] font-bold uppercase tracking-wider text-[#ed0b08]">
                 Rate Estimator
               </p>
-              <h2 className="text-lg sm:text-xl font-bold tracking-tight text-slate-950">
+              <h2 className="text-base font-bold tracking-tight text-slate-950">
                 Shipping Quote Calculator
               </h2>
             </div>
           </div>
           <button
             onClick={onClose}
-            className="grid h-9 w-9 sm:h-10 sm:w-10 place-items-center rounded-full bg-slate-100 text-slate-500 hover:bg-slate-200 hover:text-slate-900 transition-colors shrink-0"
+            className="grid h-8 w-8 place-items-center rounded-full bg-slate-100 text-slate-500 hover:bg-slate-200 hover:text-slate-900 transition-colors shrink-0"
           >
-            <X size={18} />
+            <X size={16} />
           </button>
         </div>
 
-        <div className="p-4 sm:p-6 overflow-y-auto space-y-5 sm:space-y-6 pb-[calc(env(safe-area-inset-bottom,0px)+1.5rem)]">
-          <form onSubmit={handleCalculate} className="space-y-3.5 sm:space-y-4">
-            <div className="grid grid-cols-1 xs:grid-cols-2 gap-3">
+        <div className="p-3.5 overflow-y-auto overscroll-contain space-y-4 flex-1 min-h-0 pb-[max(16px,env(safe-area-inset-bottom))]">
+          <form onSubmit={handleCalculate} className="space-y-3">
+            <div className="grid grid-cols-2 gap-2">
               <div>
-                <label className="block text-xs font-semibold text-slate-600 mb-1">
-                  Origin ZIP Code
+                <label className="block text-[11px] font-semibold text-slate-600 mb-1">
+                  Origin ZIP
                 </label>
                 <Input
                   value={originZip}
                   onChange={(e) => setOriginZip(e.target.value)}
                   placeholder="77081"
                   required
+                  className="h-8.5 text-xs"
                 />
               </div>
               <div>
-                <label className="block text-xs font-semibold text-slate-600 mb-1">
-                  Destination ZIP Code
+                <label className="block text-[11px] font-semibold text-slate-600 mb-1">
+                  Dest ZIP
                 </label>
                 <Input
                   value={destZip}
                   onChange={(e) => setDestZip(e.target.value)}
                   placeholder="e.g. 90210"
                   required
+                  className="h-8.5 text-xs"
                 />
               </div>
             </div>
 
-            <div className="grid grid-cols-1 xs:grid-cols-2 gap-3">
+            <div className="grid grid-cols-2 gap-2">
               <div>
-                <label className="block text-xs font-semibold text-slate-600 mb-1">
-                  Estimated Weight (lbs)
+                <label className="block text-[11px] font-semibold text-slate-600 mb-1">
+                  Weight (lbs)
                 </label>
                 <Input
                   type="number"
@@ -118,61 +120,62 @@ export function QuoteCalculatorModal({
                   onChange={(e) => setWeight(e.target.value)}
                   placeholder="5"
                   required
+                  className="h-8.5 text-xs"
                 />
               </div>
               <div>
-                <label className="block text-xs font-semibold text-slate-600 mb-1">
-                  Package Packaging
+                <label className="block text-[11px] font-semibold text-slate-600 mb-1">
+                  Packaging
                 </label>
                 <div className="relative">
                   <select
                     value={packageType}
                     onChange={(e) => setPackageType(e.target.value)}
-                    className="flex h-11 w-full rounded-xl border border-slate-200 bg-white px-3.5 pr-8 py-2 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#ed0b08]/20 focus:border-[#ed0b08] appearance-none"
+                    className="flex h-8.5 w-full rounded-xl border border-slate-200 bg-white px-2.5 pr-7 py-1 text-xs text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#ed0b08]/20 focus:border-[#ed0b08] appearance-none"
                   >
-                    <option value="box">Standard Electronics Box</option>
-                    <option value="pallet">Commercial Bulk Pallet</option>
-                    <option value="envelope">Padded Parts Mailer</option>
+                    <option value="box">Box</option>
+                    <option value="pallet">Bulk Pallet</option>
+                    <option value="envelope">Padded Mailer</option>
                   </select>
                   <ChevronDown
-                    size={16}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none"
+                    size={14}
+                    className="absolute right-2 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none"
                   />
                 </div>
               </div>
             </div>
 
-            <Button type="submit" variant="brand" className="w-full font-bold h-11">
+            <Button type="submit" variant="brand" className="w-full font-bold h-9 text-xs">
               Calculate Instant Quotes
             </Button>
           </form>
 
           {results && (
-            <div className="mt-5 space-y-3 pt-4 border-t border-slate-100">
-              <h4 className="text-[11px] font-bold uppercase tracking-wider text-slate-500">
+            <div className="mt-4 space-y-2.5 pt-3 border-t border-slate-100">
+              <h4 className="text-[10px] font-bold uppercase tracking-wider text-slate-500">
                 Available Shipping Options
               </h4>
 
-              <div className="space-y-2.5">
+              <div className="space-y-2">
                 {/* Option 1: Ground */}
-                <div className="flex items-center justify-between rounded-xl border border-slate-200 p-3.5 sm:p-4 hover:border-slate-300 transition-colors">
-                  <div className="flex items-center gap-3">
-                    <div className="grid h-9 w-9 sm:h-10 sm:w-10 place-items-center rounded-xl bg-slate-100 text-slate-700 shrink-0">
-                      <Truck size={17} />
+                <div className="flex items-center justify-between rounded-xl border border-slate-200 p-2.5 hover:border-slate-300 transition-colors">
+                  <div className="flex items-center gap-2.5">
+                    <div className="grid h-8 w-8 place-items-center rounded-xl bg-slate-100 text-slate-700 shrink-0">
+                      <Truck size={15} />
                     </div>
                     <div>
-                      <p className="text-xs sm:text-sm font-bold text-slate-900">Accele Ground</p>
-                      <p className="text-[11px] text-slate-400">3–5 Business Days</p>
+                      <p className="text-xs font-bold text-slate-900">Accele Ground</p>
+                      <p className="text-[10px] text-slate-400">3–5 Business Days</p>
                     </div>
                   </div>
                   <div className="text-right shrink-0">
-                    <p className="text-base sm:text-lg font-black text-slate-900">${results.ground}</p>
+                    <p className="text-sm font-black text-slate-900">${results.ground}</p>
                     <button
                       onClick={() => {
                         onClose();
                         onBookShipment();
                       }}
-                      className="text-xs font-bold text-[#ed0b08] hover:underline"
+                      className="text-[11px] font-bold text-[#ed0b08] hover:underline"
                     >
                       Select & Ship
                     </button>
@@ -180,29 +183,29 @@ export function QuoteCalculatorModal({
                 </div>
 
                 {/* Option 2: 2-Day Air */}
-                <div className="flex items-center justify-between rounded-xl border-2 border-red-500/80 bg-red-50/20 p-3.5 sm:p-4">
-                  <div className="flex items-center gap-3">
-                    <div className="grid h-9 w-9 sm:h-10 sm:w-10 place-items-center rounded-xl bg-[#ed0b08] text-white shrink-0">
-                      <Sparkles size={17} />
+                <div className="flex items-center justify-between rounded-xl border-2 border-red-500/80 bg-red-50/20 p-2.5">
+                  <div className="flex items-center gap-2.5">
+                    <div className="grid h-8 w-8 place-items-center rounded-xl bg-[#ed0b08] text-white shrink-0">
+                      <Sparkles size={15} />
                     </div>
                     <div>
-                      <div className="flex items-center gap-1.5 flex-wrap">
-                        <p className="text-xs sm:text-sm font-bold text-slate-900">Accele 2-Day</p>
-                        <span className="rounded-full bg-[#ed0b08] px-1.5 py-0.2 text-[9px] font-bold text-white">
+                      <div className="flex items-center gap-1">
+                        <p className="text-xs font-bold text-slate-900">Accele 2-Day</p>
+                        <span className="rounded-full bg-[#ed0b08] px-1 py-0.2 text-[8px] font-bold text-white">
                           Popular
                         </span>
                       </div>
-                      <p className="text-[11px] text-slate-400">2 Business Days Guaranteed</p>
+                      <p className="text-[10px] text-slate-400">2 Business Days</p>
                     </div>
                   </div>
                   <div className="text-right shrink-0">
-                    <p className="text-base sm:text-lg font-black text-[#ed0b08]">${results.priority}</p>
+                    <p className="text-sm font-black text-[#ed0b08]">${results.priority}</p>
                     <button
                       onClick={() => {
                         onClose();
                         onBookShipment();
                       }}
-                      className="text-xs font-bold text-[#ed0b08] hover:underline"
+                      className="text-[11px] font-bold text-[#ed0b08] hover:underline"
                     >
                       Select & Ship
                     </button>
@@ -210,24 +213,24 @@ export function QuoteCalculatorModal({
                 </div>
 
                 {/* Option 3: Overnight Express */}
-                <div className="flex items-center justify-between rounded-xl border border-slate-200 p-3.5 sm:p-4 hover:border-slate-300 transition-colors">
-                  <div className="flex items-center gap-3">
-                    <div className="grid h-9 w-9 sm:h-10 sm:w-10 place-items-center rounded-xl bg-slate-900 text-white shrink-0">
-                      <Truck size={17} />
+                <div className="flex items-center justify-between rounded-xl border border-slate-200 p-2.5 hover:border-slate-300 transition-colors">
+                  <div className="flex items-center gap-2.5">
+                    <div className="grid h-8 w-8 place-items-center rounded-xl bg-slate-900 text-white shrink-0">
+                      <Truck size={15} />
                     </div>
                     <div>
-                      <p className="text-xs sm:text-sm font-bold text-slate-900">Accele Next-Day Air</p>
-                      <p className="text-[11px] text-slate-400">Next Morning by 10:30 AM</p>
+                      <p className="text-xs font-bold text-slate-900">Accele Next-Day</p>
+                      <p className="text-[10px] text-slate-400">Next Morning by 10:30 AM</p>
                     </div>
                   </div>
                   <div className="text-right shrink-0">
-                    <p className="text-base sm:text-lg font-black text-slate-900">${results.express}</p>
+                    <p className="text-sm font-black text-slate-900">${results.express}</p>
                     <button
                       onClick={() => {
                         onClose();
                         onBookShipment();
                       }}
-                      className="text-xs font-bold text-[#ed0b08] hover:underline"
+                      className="text-[11px] font-bold text-[#ed0b08] hover:underline"
                     >
                       Select & Ship
                     </button>
